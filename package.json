@@ -1,0 +1,19 @@
+{
+  "name": "com.nebukam.utils",
+  "version": "0.0.1",
+  "displayName": "Utils",
+  "description": "Various utility functions. From handy maths methods to quality of life extensions to native Unity types.",
+  "unity": "2019.1",
+  "unityRelease": "10f1",
+  "keywords": [
+    "Utils",
+    "Maths",
+    "Debug"
+  ],
+  "category": "Utils",
+  "author": {
+    "name": "Timothe Lapetite",
+    "email": "nebukam@gmail.com",
+    "url": ""
+  }
+}
