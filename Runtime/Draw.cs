@@ -6,21 +6,43 @@ namespace Nebukam.Utils
     static public class Draw
     {
         
+        /// <summary>
+        /// Draw a line between two positions.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
         static public void Line(Vector3 from, Vector3 to)
         {
             Line(from, to, Color.red);
         }
 
+        /// <summary>
+        /// Draw a line between two positions, with a specific color.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="col"></param>
         static public void Line(Vector3 from, Vector3 to, Color col)
         {
             Debug.DrawLine(from, to, col);
         }
 
+        /// <summary>
+        /// Draw a circle (XZ plane).
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
         static public void Circle(Vector3 center, float radius)
         {
             Circle(center, radius, Color.red);
         }
-        
+
+        /// <summary>
+        /// Draw a circle (XZ plane), with a specific color.
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="col"></param>
         static public void Circle(Vector3 center, float radius, Color col)
         {
 
@@ -45,11 +67,22 @@ namespace Nebukam.Utils
             }
         }
 
+        /// <summary>
+        /// Draw a circle (XY plane).
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
         static public void Circle2D(Vector3 center, float radius)
         {
             Circle2D(center, radius, Color.red);
         }
 
+        /// <summary>
+        /// Draw a circle (XY plane), with a specific color.
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="col"></param>
         static public void Circle2D(Vector3 center, float radius, Color col)
         {
 
@@ -74,6 +107,12 @@ namespace Nebukam.Utils
             }
         }
 
+        /// <summary>
+        /// Draw a square at the specified location (XZ plane).
+        /// </summary>
+        /// <param name="center"></param>
+        /// <param name="size"></param>
+        /// <param name="col"></param>
         static public void Square(Vector3 center, float size, Color col)
         {
             float s = size * 0.5f;

@@ -23,12 +23,20 @@ namespace Nebukam.Utils
         public static char[] trim_space = { ' ' };
         public static string string_space = " ";
         
-        public static bool TrySplitPath(string input, char[] delimiters, out string[] path)
+        /// <summary>
+        /// Attempt to split a string using the specified delimiters.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="delimiters"></param>
+        /// <param name="result"></param>
+        /// <returns>True if the result length is greater than one;
+        /// otherwise, false.</returns>
+        public static bool TrySplit(string input, char[] delimiters, out string[] result)
         {
 
-            path = input.Split(delimiters);
+            result = input.Split(delimiters);
 
-            if (path.Length > 1)
+            if (result.Length > 1)
                 return true;
 
             return false;
@@ -87,6 +95,13 @@ namespace Nebukam.Utils
 
         }
 
+        /// <summary>
+        /// Attempt to parse a string into a Vector2 object.
+        /// Format is 1.0,2.0
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="vector"></param>
+        /// <returns></returns>
         public static bool TryParse(string s, out Vector2 vector)
         {
             if (string.IsNullOrEmpty(s))
@@ -115,6 +130,13 @@ namespace Nebukam.Utils
             return true;
         }
 
+        /// <summary>
+        /// Attempt to parse a string into a Vector3 object.
+        /// Format is 1.0,2.0,3.0
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="vector"></param>
+        /// <returns></returns>
         public static bool TryParse(string s, out Vector3 vector)
         {
 

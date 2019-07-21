@@ -5,6 +5,11 @@ namespace Nebukam.Utils
     static public class Colors
     {
 
+        /// <summary>
+        /// Concat an RGBA Color object into a single float.
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
         static public float ConcatRGBA(Color col)
         {
             float m = 1000f;
@@ -13,7 +18,11 @@ namespace Nebukam.Utils
 
         }
 
-
+        /// <summary>
+        /// Concat an RGB Color object into a single float.
+        /// </summary>
+        /// <param name="col"></param>
+        /// <returns></returns>
         static public float ConcatRGB(Color col)
         {
             float m = 1000f;

@@ -13,23 +13,72 @@ namespace Nebukam.Utils
 
         #endregion
 
+        #region Random
+
+        /// <summary>
+        /// A random value ranging from 0 to a given range. 
+        /// Mirrored, the value ranges from -range to +range
+        /// </summary>
+        /// <param name="range"></param>
+        /// <param name="mirror"></param>
+        /// <returns></returns>
+        public static float Rand(float range, bool mirror = true)
+        {
+            return UnityEngine.Random.value * range - (mirror ? UnityEngine.Random.value * range : 0.0f);
+        }
+
+        /// <summary>
+        /// Return a random value within a given min/max range.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static float RandRange(float min, float max)
+        {
+            return min + Rand(max - min, false);
+        }
+
+
+        #endregion
+
         #region Maths
 
+        /// <summary>
+        /// Multiply a float by itself
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
         public static float Sqr(float f)
         {
             return f * f;
         }
 
+        /// <summary>
+        /// Multiply an int by itself
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
         public static int Sqr(int f)
         {
             return f * f;
         }
 
+        /// <summary>
+        /// Convert a value in radian into degree
+        /// </summary>
+        /// <param name="radian"></param>
+        /// <returns></returns>
         public static float Degrees(float radian)
         {
             return radian * (180 / Mathf.PI);
         }
 
+        /// <summary>
+        /// Return the angle of a 2D point, in degree from -180 to 180
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public static float FindDegree(float x, float y)
         {
             float value = (Mathf.Atan2(x, y) / Mathf.PI) * 180f;
@@ -38,14 +87,11 @@ namespace Nebukam.Utils
             return value;
         }
 
-        public static Vector3 RotateAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-        {
-            Vector3 dir = point - pivot; // get point direction relative to pivot
-            dir = Quaternion.Euler(angles) * dir; // rotate it
-            point = dir + pivot; // calculate rotated point
-            return point; // return it
-        }
-
+        /// <summary>
+        /// Strips up a precision digit from a vector
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static Vector3 RoundUpVector(Vector3 v)
         {
             v.x = Mathf.Round(v.x * 10f) / 10f;
@@ -53,112 +99,13 @@ namespace Nebukam.Utils
             v.z = Mathf.Round(v.z * 10f) / 10f;
             return v;
         }
-
-        public static Vector3 Normal(Vector3 A, Vector3 B, Vector3 C)
-        {
-            return Vector3.Cross((B - A), (A - C)).normalized;
-        }
-
-        /// <summary>
-        /// C = B + Vector3.up
-        /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <returns></returns>
-        public static Vector3 Perp(Vector3 A, Vector3 B)
-        {
-            return Normal(A, B, B + Vector3.up);
-        }
-
-        /// <summary>
-        /// C = B+dir
-        /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
-        /// <param name="dir"></param>
-        /// <returns></returns>
-        public static Vector3 NormalDir(Vector3 A, Vector3 B, Vector3 dir)
-        {
-            return Normal(A, B, B + dir);
-        }
-
-        public static Vector3 Mult(Vector3 a, Vector3 b)
-        {
-            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
-        }
-
-        public static Vector3 RoundLerp(Vector3 from, Vector3 to, float t, float tolerance = 0.1f)
-        {
-
-            if (Vector3.Distance(from, to) < tolerance)
-                return to;
-
-            return Vector3.Lerp(from, to, t);
-
-        }
-
-        public static Vector3 RoundSlerp(Vector3 from, Vector3 to, float t, float tolerance = 0.1f)
-        {
-            if (Vector3.Distance(from, to) < tolerance)
-                return to;
-
-            return Vector3.Slerp(from, to, t);
-        }
-
-        /// <summary>
-        /// Normalized value remapping
-        /// Example : remap 0.5 to (0.5, 1.0) = 0;
-        /// </summary>
-        /// <param name="val"></param>
-        /// <returns></returns>
-        public static float NrmRemap(float val, float min, float max = 1.0f)
-        {
-            float diff = val - min;
-
-            if (diff <= 0.0f)
-            {
-                return 0.0f;
-            }
-
-            float scale = max - min;
-
-            return diff / scale;
-        }
-
-        public static float Rand(float range, bool mirror = true)
-        {
-            return UnityEngine.Random.value * range - (mirror ? UnityEngine.Random.value * range : 0.0f);
-        }
-
-        public static float RandRange(float min, float max)
-        {
-            return min + Rand(max - min, false);
-        }
-
-        public static Vector3 RotateAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle)
-        {
-            return angle * (point - pivot) + pivot;
-        }
         
-        public static Vector3 RotatePointAroundAxisDir(Vector3 origin, Vector3 axis, Vector3 dir, float radius, float radAngle)
-        {
-
-            Vector3 a, b, c, n;
-
-            a = Vector3.zero;
-            b = axis;
-            c = dir;
-
-            n = Vector3.Cross(b - a, c - a).normalized;
-
-            Quaternion rot = Quaternion.AngleAxis(radAngle / 0.0174532924f, axis); // get the desired rotation
-
-            n = (rot * n);
-
-            return origin + (n * radius);
-
-        }
-
+        /// <summary>
+        /// Return a scale ratio so a given content size fits in a given container size.
+        /// </summary>
+        /// <param name="containerSize"></param>
+        /// <param name="contentSize"></param>
+        /// <returns></returns>
         public static float PreserveRatio(Vector2 containerSize, Vector2 contentSize)
         {
 
@@ -295,6 +242,127 @@ namespace Nebukam.Utils
         #endregion
 
         #region Vector maths
+
+        /// <summary>
+        /// Return the Normal vector of an A, B, C triad
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <returns></returns>
+        public static Vector3 Normal(Vector3 A, Vector3 B, Vector3 C)
+        {
+            return Vector3.Cross((B - A), (A - C)).normalized;
+        }
+
+        /// <summary>
+        /// Normal | C = B + Vector3.up
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <returns></returns>
+        public static Vector3 Perp(Vector3 A, Vector3 B)
+        {
+            return Normal(A, B, B + Vector3.up);
+        }
+
+        /// <summary>
+        /// Normal | C = B+dir
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public static Vector3 NormalDir(Vector3 A, Vector3 B, Vector3 dir)
+        {
+            return Normal(A, B, B + dir);
+        }
+
+        /// <summary>
+        /// Multiply each vector's component individually, returning the resulting vector.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static Vector3 Mult(Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
+
+        /// <summary>
+        /// Normalized value remapping
+        /// Example : remap 0.5 to (0.5, 1.0) = 0;
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static float NrmRemap(float val, float min, float max = 1.0f)
+        {
+            float diff = val - min;
+
+            if (diff <= 0.0f)
+            {
+                return 0.0f;
+            }
+
+            float scale = max - min;
+
+            return diff / scale;
+        }
+
+        /// <summary>
+        /// Rotate a point around a pivot, by an amount formatted as a Quaternion
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        public static Vector3 RotateAroundPivot(Vector3 point, Vector3 pivot, Quaternion angle)
+        {
+            return angle * (point - pivot) + pivot;
+        }
+
+        /// <summary>
+        /// Rotate a point around a pivot, by a given amount on each axis.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="pivot"></param>
+        /// <param name="angles"></param>
+        /// <returns></returns>
+        public static Vector3 RotateAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+        {
+            Vector3 dir = point - pivot; // get point direction relative to pivot
+            dir = Quaternion.Euler(angles) * dir; // rotate it
+            point = dir + pivot; // calculate rotated point
+            return point; // return it
+        }
+
+        /// <summary>
+        /// Rotate point around an axis and a given direction.
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="axis"></param>
+        /// <param name="dir"></param>
+        /// <param name="radius"></param>
+        /// <param name="radAngle"></param>
+        /// <returns></returns>
+        public static Vector3 RotatePointAroundAxisDir(Vector3 origin, Vector3 axis, Vector3 dir, float radius, float radAngle)
+        {
+
+            Vector3 a, b, c, n;
+
+            a = Vector3.zero;
+            b = axis;
+            c = dir;
+
+            n = Vector3.Cross(b - a, c - a).normalized;
+
+            Quaternion rot = Quaternion.AngleAxis(radAngle / 0.0174532924f, axis); // get the desired rotation
+
+            n = (rot * n);
+
+            return origin + (n * radius);
+
+        }
 
         /// <summary>
         /// Computes the determinant of a two-dimensional square matrix 
