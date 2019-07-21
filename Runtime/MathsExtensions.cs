@@ -17,12 +17,12 @@ namespace Nebukam.Utils
 
         public static float Abs(this Vector2 @this)
         {
-            return Mathf.Sqrt(@this.AbsSq());
+            return Mathf.Sqrt( @this.x * @this.x + @this.y * @this.y );
         }
 
         public static float AbsSq(this Vector2 @this)
         {
-            return Maths.Mix(@this, @this);
+            return @this.x * @this.x + @this.y * @this.y;
         }
 
         public static float Det(this Vector2 @this, Vector2 other)
@@ -30,7 +30,7 @@ namespace Nebukam.Utils
             return @this.x * other.y - @this.y * other.x;
         }
 
-        public static float Mix(this Vector2 @this, Vector2 other)
+        public static float Dot(this Vector2 @this, Vector2 other)
         {
             return @this.x * other.x + @this.y * other.y;
         }
@@ -40,11 +40,11 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="this"></param>
         /// <param name="other"></param>
-        /// <param name="amount"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        public static Vector2 To(this Vector2 @this, Vector2 other, float amount)
+        public static Vector2 To(this Vector2 @this, Vector2 other, float t)
         {
-            return Vector2.Lerp(@this, other, amount);
+            return new Vector2(@this.x + (other.x - @this.x) * t, @this.y + (other.y - @this.y) * t);
         }
 
         /// <summary>
@@ -52,11 +52,117 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="this"></param>
         /// <param name="other"></param>
-        /// <param name="amount"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
-        public static Vector3 To(this Vector3 @this, Vector3 other, float amount)
+        public static Vector3 To(this Vector3 @this, Vector3 other, float t)
         {
-            return Vector3.Lerp(@this, other, amount);
+            return new Vector3(@this.x + (other.x - @this.x) * t, @this.y + (other.y - @this.y) * t, @this.z + (other.z - @this.z) * t);
+        }
+
+        /// <summary>
+        /// Is a point between a and b?
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this Vector2 @this, Vector2 a, Vector2 b)
+        {
+            
+            Vector2 ab = new Vector2(b.x - a.x, b.y - a.y);//Entire line segment
+            Vector2 ac = new Vector2(@this.x - a.x, @this.y - a.y);//The intersection and the first point
+
+            float dot = ab.x * ac.x + ab.y * ac.y;
+
+            //If the vectors are pointing in the same direction = dot product is positive
+            if (dot <= 0f) { return false; }
+
+            float abm = ab.x * ab.x + ab.y * ab.y;
+            float acm = ac.x * ac.x + ac.y * ac.y;
+            
+            //If the length of the vector between the intersection and the first point is smaller than the entire line
+            return (abm >= acm);
+        }
+
+        /// <summary>
+        /// Is a point between a and b?
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsBetween(this Vector3 @this, Vector3 a, Vector3 b)
+        {
+            
+            Vector3 ab = new Vector3(b.x - a.x, b.y - a.y, b.z - a.z); //Entire line segment
+            Vector3 ac = new Vector3(@this.x - a.x, @this.y - a.y, @this.z - a.z);//The intersection and the first point
+
+            float dot = ab.x * ac.x + ab.y * ac.y + ab.z * ac.z;
+
+            //If the vectors are pointing in the same direction = dot product is positive
+            if (dot <= 0f) { return false; }
+
+            float abm = ab.x * ab.x + ab.y * ab.y + ab.z * ab.z;
+            float acm = ac.x * ac.x + ac.y * ac.y + ac.z * ac.z;
+
+            //If the length of the vector between the intersection and the first point is smaller than the entire line
+            return (abm >= acm);
+        }
+
+        /// <summary>
+        /// Checks whether this vector is orthogonal with another given vector
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsOrthogonalTo(this Vector2 @this, Vector2 b)
+        {
+            //2 vectors are orthogonal is the dot product is 0
+            //We have to check if close to 0 because of floating numbers
+            float dot = @this.x * b.x + @this.y * b.y;
+            return (dot < Maths.EPSILON && dot > Maths.NEPSILON);
+        }
+
+        /// <summary>
+        /// Checks whether this vector is orthogonal with another given vector
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsOrthogonalTo(this Vector3 @this, Vector3 b)
+        {
+            //2 vectors are orthogonal is the dot product is 0
+            //We have to check if close to 0 because of floating numbers
+            float dot = @this.x * b.x + @this.y * b.y + @this.z * b.z;
+            return (dot < Maths.EPSILON && dot > Maths.NEPSILON);
+        }
+
+        /// <summary>
+        /// Checks whether this vector is parallel to another given vector
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsParallelTo(this Vector2 @this, Vector2 b)
+        {
+            //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
+            Vector3 an = @this.normalized, bn = b.normalized;
+            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y), -1f, 1f)) * 57.29578f;
+            return (angle == 0f || angle == 180f);
+        }
+
+        /// <summary>
+        /// Checks whether this vector is parallel to another given vector
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsParallelTo(this Vector3 @this, Vector3 b)
+        {
+            //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
+            Vector3 an = @this.normalized, bn = b.normalized;
+            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y + an.z * bn.z), -1f, 1f)) * 57.29578f;
+            return (angle == 0f || angle == 180f);
         }
 
     }
