@@ -1,7 +1,7 @@
 {
   "name": "com.nebukam.utils",
   "version": "0.0.1",
-  "displayName": "Utils",
+  "displayName": "N:Utils",
   "description": "Various utility functions. From handy maths methods to quality of life extensions to native Unity types.",
   "unity": "2019.1",
   "unityRelease": "10f1",
