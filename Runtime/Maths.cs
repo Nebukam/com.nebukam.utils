@@ -525,7 +525,31 @@ namespace Nebukam.Utils
         }
 
         #endregion
-        
+
+        #region Triangle
+
+        public static bool InTriangleXY(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
+        {
+            float A = 1 / 2 * (-b.y * c.x + a.y * (-b.x + c.x) + a.x * (b.y - c.y) + b.x * c.y);
+            float sign = A < 0 ? -1 : 1;
+            float s = (a.y * c.x - a.x * c.y + (c.y - a.y) * pt.x + (a.x - c.x) * pt.y) * sign;
+            float t = (a.x * b.y - a.y * b.x + (a.y - b.y) * pt.x + (b.x - a.x) * pt.y) * sign;
+
+            return s > 0 && t > 0 && (s + t) < 2 * A * sign;
+        }
+
+        public static bool InTriangleXZ(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
+        {
+            float A = 1 / 2 * (-b.z * c.x + a.z * (-b.x + c.x) + a.x * (b.z - c.z) + b.x * c.z);
+            float sign = A < 0 ? -1 : 1;
+            float s = (a.z * c.x - a.x * c.z + (c.z - a.z) * pt.x + (a.x - c.x) * pt.z) * sign;
+            float t = (a.x * b.z - a.z * b.x + (a.z - b.z) * pt.x + (b.x - a.x) * pt.z) * sign;
+
+            return s > 0 && t > 0 && (s + t) < 2 * A * sign;
+        }
+
+        #endregion
+
         #region Matrices
 
         /// <summary>
