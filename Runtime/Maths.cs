@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using Unity.Mathematics;
+using static Unity.Mathematics.math;
 
 namespace Nebukam.Utils
 {
@@ -13,7 +15,7 @@ namespace Nebukam.Utils
         public const float TAU = (float)Math.PI * 2.0f;
 
         #endregion
-
+        
         #region Random
 
         /// <summary>
@@ -43,6 +45,27 @@ namespace Nebukam.Utils
         #endregion
 
         #region Scalar
+
+        /// <summary>
+        /// Normalized value remapping
+        /// Example : remap 0.5 to (0.5, 1.0) = 0;
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public static float NrmRemap(float val, float min, float max = 1.0f)
+        {
+            float diff = val - min;
+
+            if (diff <= 0.0f)
+            {
+                return 0.0f;
+            }
+
+            float scale = max - min;
+
+            return diff / scale;
+        }
+
 
         /// <summary>
         /// Multiply a float by itself
@@ -105,7 +128,7 @@ namespace Nebukam.Utils
         }
 
         #endregion
-
+        
         #region Vector
 
         #region normals
@@ -123,6 +146,18 @@ namespace Nebukam.Utils
         }
 
         /// <summary>
+        /// Return the Normal vector of an A, B, C triad
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        /// <returns></returns>
+        public static float3 Normal(float3 A, float3 B, float3 C)
+        {
+            return normalize(cross((B - A), (A - C)));
+        }
+
+        /// <summary>
         /// Normal | C = B + Vector3.up
         /// </summary>
         /// <param name="A"></param>
@@ -131,6 +166,17 @@ namespace Nebukam.Utils
         public static Vector3 Perp(Vector3 A, Vector3 B)
         {
             return Normal(A, B, B + Vector3.up);
+        }
+
+        /// <summary>
+        /// Normal | C = B + Vector3.up
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <returns></returns>
+        public static float3 Perp(float3 A, float3 B)
+        {
+            return Normal(A, B, B + float3(0f,1f,0f));
         }
 
         /// <summary>
@@ -145,6 +191,18 @@ namespace Nebukam.Utils
             return Normal(A, B, B + dir);
         }
 
+        /// <summary>
+        /// Normal | C = B+dir
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        public static float3 NormalDir(float3 A, float3 B, float3 dir)
+        {
+            return Normal(A, B, B + dir);
+        }
+
         #endregion
 
         /// <summary>
@@ -153,31 +211,16 @@ namespace Nebukam.Utils
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static Vector3 Mult(Vector3 a, Vector3 b)
-        {
-            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
-        }
+        public static Vector3 Mult(Vector3 a, Vector3 b){ return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z); }
 
         /// <summary>
-        /// Normalized value remapping
-        /// Example : remap 0.5 to (0.5, 1.0) = 0;
+        /// Multiply each vector's component individually, returning the resulting vector.
         /// </summary>
-        /// <param name="val"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         /// <returns></returns>
-        public static float NrmRemap(float val, float min, float max = 1.0f)
-        {
-            float diff = val - min;
-
-            if (diff <= 0.0f)
-            {
-                return 0.0f;
-            }
-
-            float scale = max - min;
-
-            return diff / scale;
-        }
-
+        public static float3 Mult(float3 a, float3 b) { return new float3(a.x * b.x, a.y * b.y, a.z * b.z); }
+        
         #region rotations
 
         /// <summary>
@@ -249,12 +292,34 @@ namespace Nebukam.Utils
             return a.x * b.y - a.y * b.x;
         }
 
+        /// <summary>
+        /// Computes the determinant of a two-dimensional square matrix 
+        /// with rows consisting of the specified two-dimensional vectors.
+        /// </summary>
+        /// <param name="a">The top row of the two-dimensional square matrix</param>
+        /// <param name="b">The bottom row of the two-dimensional square matrix</param>
+        /// <returns>The determinant of the two-dimensional square matrix.</returns>
+        public static float Det(float2 a, float2 b)
+        {
+            return a.x * b.y - a.y * b.x;
+        }
+        
         public static float Dot(Vector2 a, Vector2 b)
         {
             return a.x * b.x + a.y * b.y;
         }
 
+        public static float Dot(float2 a, float2 b)
+        {
+            return a.x * b.x + a.y * b.y;
+        }
+
         public static float Dot(Vector3 a, Vector3 b)
+        {
+            return a.x * b.x + a.y * b.y + a.z * b.z;
+        }
+
+        public static float Dot(float3 a, float3 b)
         {
             return a.x * b.x + a.y * b.y + a.z * b.z;
         }
@@ -274,7 +339,27 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="v"></param>
         /// <returns>The squared length of the two-dimensional vector.</returns>
+        public static float AbsSq(float2 v)
+        {
+            return v.x * v.x + v.y * v.y;
+        }
+
+        /// <summary>
+        /// Computes the squared length of a specified two-dimensional vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns>The squared length of the two-dimensional vector.</returns>
         public static float AbsSq(Vector3 v)
+        {
+            return v.x * v.x + v.y * v.y + v.z * v.z;
+        }
+
+        /// <summary>
+        /// Computes the squared length of a specified two-dimensional vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns>The squared length of the two-dimensional vector.</returns>
+        public static float AbsSq(float3 v)
         {
             return v.x * v.x + v.y * v.y + v.z * v.z;
         }
@@ -294,7 +379,27 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
+        public static float Abs(float2 v)
+        {
+            return Mathf.Sqrt(v.x * v.x + v.y * v.y);
+        }
+
+        /// <summary>
+        /// >Computes the length of a specified two-dimensional vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static float Abs(Vector3 v)
+        {
+            return Mathf.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        }
+
+        /// <summary>
+        /// >Computes the length of a specified two-dimensional vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static float Abs(float3 v)
         {
             return Mathf.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         }
@@ -311,10 +416,22 @@ namespace Nebukam.Utils
             return Det(a - c, b - a);
         }
 
+        /// <summary>
+        /// Computes the signed distance from a line connecting the specified points to a specified point.
+        /// </summary>
+        /// <param name="a">The first point on the line.</param>
+        /// <param name="b">The second point on the line.</param>
+        /// <param name="c">The point to which the signed distance is to be calculated.</param>
+        /// <returns>Positive when the point c lies to the left of the line ab.</returns>
+        public static float LeftOf(float2 a, float2 b, float2 c)
+        {
+            return Det(a - c, b - a);
+        }
+
         #endregion
 
         #region Line
-        
+
         /// <summary>
         /// Computes the squared distance from a line segment with the specified endpoints to a specified point.
         /// </summary>
@@ -348,21 +465,38 @@ namespace Nebukam.Utils
 
         }
 
-        /*
-         float r = (Dot((c - a), (b - a))) / (b - a).AbsSq();
+        /// <summary>
+        /// Computes the squared distance from a line segment with the specified endpoints to a specified point.
+        /// </summary>
+        /// <param name="a">The first endpoint of the line segment.</param>
+        /// <param name="b">The second endpoint of the line segment.</param>
+        /// <param name="c">The point to which the squared distance is to be calculated.</param>
+        /// <returns>The squared distance from the line segment to the point.</returns>
+        public static float DistSqPointLineSegment(float2 a, float2 b, float2 c)
+        {
+
+            //TODO : inline operations instead of calling shorthands
+            float2 ca = float2(c.x - a.x, c.y - a.y);
+            float2 ba = float2(b.x - a.x, b.y - a.y);
+            float dot = ca.x * ba.x + ca.y * ba.y;
+
+            float r = dot / (ba.x * ba.x + ba.y * ba.y);
 
             if (r < 0.0f)
             {
-                return (c - a).AbsSq();
+                return ca.x * ca.x + ca.y * ca.y;
             }
 
             if (r > 1.0f)
             {
-                return (c - b).AbsSq();
+                float2 cb = float2(c.x - b.x, c.y - b.y);
+                return cb.x * cb.x + cb.y * cb.y;
             }
 
-            return (c - (a + r * (b - a))).AbsSq();
-         */
+            float2 d = float2(c.x - (a.x + r * ba.x), c.y - (a.y + r * ba.y));
+            return d.x * d.x + d.y * d.y;
+
+        }
 
         /// <summary>
         /// Is a point c between a and b?
@@ -371,11 +505,36 @@ namespace Nebukam.Utils
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool IsBetween(Vector2 a, Vector2 b, Vector2 c)
+        /*public static bool IsBetween(Vector2 a, Vector2 b, Vector2 c)
         {
             
             Vector2 ab = new Vector2(b.x - a.x, b.y - a.y);//Entire line segment
             Vector2 ac = new Vector2(c.x - a.x, c.y - a.y);//The intersection and the first point
+
+            float dot = ab.x * ac.x + ab.y * ac.y;
+
+            //If the vectors are pointing in the same direction = dot product is positive
+            if (dot <= 0f) { return false; }
+
+            float abm = ab.x * ab.x + ab.y * ab.y;
+            float acm = ac.x * ac.x + ac.y * ac.y;
+
+            //If the length of the vector between the intersection and the first point is smaller than the entire line
+            return (abm >= acm);
+        }*/
+
+        /// <summary>
+        /// Is a point c between a and b?
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsBetween(float2 a, float2 b, float2 c)
+        {
+
+            float2 ab = float2(b.x - a.x, b.y - a.y);//Entire line segment
+            float2 ac = float2(c.x - a.x, c.y - a.y);//The intersection and the first point
 
             float dot = ab.x * ac.x + ab.y * ac.y;
 
@@ -415,6 +574,31 @@ namespace Nebukam.Utils
         }
 
         /// <summary>
+        /// Is a point c between a and b?
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsBetween(float3 a, float3 b, float3 c)
+        {
+
+            float3 ab = float3(b.x - a.x, b.y - a.y, b.z - a.z);//Entire line segment
+            float3 ac = float3(c.x - a.x, c.y - a.y, c.z - a.z);//The intersection and the first point
+
+            float dot = ab.x * ac.x + ab.y * ac.y + ab.z * ac.z;
+
+            //If the vectors are pointing in the same direction = dot product is positive
+            if (dot <= 0f) { return false; }
+
+            float abm = ab.x * ab.x + ab.y * ab.y + ab.z * ab.z;
+            float acm = ac.x * ac.x + ac.y * ac.y + ac.z * ac.z;
+
+            //If the length of the vector between the intersection and the first point is smaller than the entire line
+            return (abm >= acm);
+        }
+
+        /// <summary>
         /// Checks whether two vector are orthogonal
         /// </summary>
         /// <param name="a"></param>
@@ -434,7 +618,35 @@ namespace Nebukam.Utils
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
+        public static bool IsOrthogonal(float2 a, float2 b)
+        {
+            //2 vectors are orthogonal is the dot product is 0
+            //We have to check if close to 0 because of floating numbers
+            float dot = a.x * b.x + a.y * b.y;
+            return (dot < EPSILON && dot > NEPSILON);
+        }
+
+        /// <summary>
+        /// Checks whether two vector are orthogonal
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool IsOrthogonal(Vector3 a, Vector3 b)
+        {
+            //2 vectors are orthogonal is the dot product is 0
+            //We have to check if close to 0 because of floating numbers
+            float dot = a.x * b.x + a.y * b.y + a.z * b.z;
+            return (dot < EPSILON && dot > NEPSILON);
+        }
+
+        /// <summary>
+        /// Checks whether two vector are orthogonal
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsOrthogonal(float3 a, float3 b)
         {
             //2 vectors are orthogonal is the dot product is 0
             //We have to check if close to 0 because of floating numbers
@@ -462,10 +674,38 @@ namespace Nebukam.Utils
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
+        public static bool IsParallel(float2 a, float2 b)
+        {
+            //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
+            Vector2 an = normalize(a), bn = normalize(b);
+            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y), -1f, 1f)) * 57.29578f;
+            return (angle == 0f || angle == 180f);
+        }
+
+        /// <summary>
+        /// Checks whether two vector are parallel or not
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool IsParallel(Vector3 a, Vector3 b)
         {
             //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
             Vector3 an = a.normalized, bn = b.normalized;
+            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y + an.z * bn.z), -1f, 1f)) * 57.29578f;
+            return (angle == 0f || angle == 180f);
+        }
+
+        /// <summary>
+        /// Checks whether two vector are parallel or not
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsParallel(float3 a, float3 b)
+        {
+            //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
+            Vector3 an = normalize(a), bn = normalize(b);
             float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y + an.z * bn.z), -1f, 1f)) * 57.29578f;
             return (angle == 0f || angle == 180f);
         }
@@ -508,6 +748,40 @@ namespace Nebukam.Utils
             }
         }
 
+        public static bool TryGetCircleIntersection(
+            float2 centerA,
+            float radiusA,
+            float2 centerB,
+            float radiusB,
+            out float2 pt1,
+            out float2 pt2)
+        {
+
+            float2 AB = float2(centerA.x - centerB.x, centerA.y - centerB.y);
+            float d = Mathf.Sqrt(AB.x * AB.x + AB.y * AB.y);
+
+            if (d <= (radiusA + radiusB) && d >= Mathf.Abs(radiusB - radiusA))
+            {
+
+                float ex = (centerB.x - centerA.x) / d, ey = (centerB.y - centerA.y) / d,
+                    x = (radiusA * radiusA - radiusB * radiusB + d * d) / (2 * d),
+                    y = Mathf.Sqrt(radiusA * radiusA - x * x),
+                    xex = centerA.x + x * ex, xey = centerA.y + x * ey, yex = y * ex, yey = y * ey;
+
+                pt1 = float2(xex - yey, xey + yex);
+                pt2 = float2(xex + yey, xey - yex);
+
+                return true;
+
+            }
+            else
+            {
+                // No Intersection, far outside or one circle within the other
+                pt1 = pt2 = Vector2.zero;
+                return false;
+            }
+        }
+
         public static bool CircleIntersects(
             Vector2 centerA,
             float radiusA,
@@ -515,7 +789,23 @@ namespace Nebukam.Utils
             float radiusB)
         {
 
-            Vector3 AB = new Vector2(centerA.x - centerB.x, centerA.y - centerB.y);
+            Vector2 AB = new Vector2(centerA.x - centerB.x, centerA.y - centerB.y);
+            float d = Mathf.Sqrt(AB.x * AB.x + AB.y * AB.y);
+
+            if (d <= (radiusA + radiusB) && d >= Mathf.Abs(radiusB - radiusA))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool CircleIntersects(
+            float2 centerA,
+            float radiusA,
+            float2 centerB,
+            float radiusB)
+        {
+
+            float2 AB = float2(centerA.x - centerB.x, centerA.y - centerB.y);
             float d = Mathf.Sqrt(AB.x * AB.x + AB.y * AB.y);
 
             if (d <= (radiusA + radiusB) && d >= Mathf.Abs(radiusB - radiusA))
@@ -528,7 +818,7 @@ namespace Nebukam.Utils
 
         #region Triangle
 
-        public static bool InTriangleXY(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
+        public static bool TriangleContainsXY(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
         {
             float A = 1 / 2 * (-b.y * c.x + a.y * (-b.x + c.x) + a.x * (b.y - c.y) + b.x * c.y);
             float sign = A < 0 ? -1 : 1;
@@ -538,7 +828,17 @@ namespace Nebukam.Utils
             return s > 0 && t > 0 && (s + t) < 2 * A * sign;
         }
 
-        public static bool InTriangleXZ(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
+        public static bool TriangleContainsXY(float3 pt, float3 a, float3 b, float3 c)
+        {
+            float A = 1 / 2 * (-b.y * c.x + a.y * (-b.x + c.x) + a.x * (b.y - c.y) + b.x * c.y);
+            float sign = A < 0 ? -1 : 1;
+            float s = (a.y * c.x - a.x * c.y + (c.y - a.y) * pt.x + (a.x - c.x) * pt.y) * sign;
+            float t = (a.x * b.y - a.y * b.x + (a.y - b.y) * pt.x + (b.x - a.x) * pt.y) * sign;
+
+            return s > 0 && t > 0 && (s + t) < 2 * A * sign;
+        }
+
+        public static bool TriangleContainsXZ(Vector3 pt, Vector3 a, Vector3 b, Vector3 c)
         {
             float A = 1 / 2 * (-b.z * c.x + a.z * (-b.x + c.x) + a.x * (b.z - c.z) + b.x * c.z);
             float sign = A < 0 ? -1 : 1;
@@ -547,6 +847,45 @@ namespace Nebukam.Utils
 
             return s > 0 && t > 0 && (s + t) < 2 * A * sign;
         }
+
+        public static bool TriangleContainsXZ(float3 pt, float3 a, float3 b, float3 c)
+        {
+            float A = 1 / 2 * (-b.z * c.x + a.z * (-b.x + c.x) + a.x * (b.z - c.z) + b.x * c.z);
+            float sign = A < 0 ? -1 : 1;
+            float s = (a.z * c.x - a.x * c.z + (c.z - a.z) * pt.x + (a.x - c.x) * pt.z) * sign;
+            float t = (a.x * b.z - a.z * b.x + (a.z - b.z) * pt.x + (b.x - a.x) * pt.z) * sign;
+
+            return s > 0 && t > 0 && (s + t) < 2 * A * sign;
+        }
+
+        public static Vector3 CircumSphere(Vector3 A, Vector3 B, Vector3 C)
+        {
+            Vector3 ac = C - A;
+            Vector3 ab = B - A;
+            Vector3 abXac = Vector3.Cross(ab, ac);
+
+            // this is the vector from a TO the circumsphere center
+            Vector3 toCircumsphereCenter = (Vector3.Cross(abXac, ab) * ac.sqrMagnitude + Vector3.Cross(ac, abXac) * ab.sqrMagnitude) / (2.0f * abXac.sqrMagnitude);
+            //float circumsphereRadius = toCircumsphereCenter.magnitude;
+
+            // The 3 space coords of the circumsphere center then:
+            return A + toCircumsphereCenter; // now this is the actual 3space location
+        }
+
+        public static Vector3 CircumSphere(float3 A, float3 B, float3 C)
+        {
+            float3 ac = C - A;
+            float3 ab = B - A;
+            float3 abXac = cross(ab, ac);
+
+            // this is the vector from a TO the circumsphere center
+            float3 toCircumsphereCenter = (cross(abXac, ab) * sqrt(ac) + cross(ac, abXac) * sqrt(ab)) / (2.0f * sqrt(abXac));
+            //float circumsphereRadius = toCircumsphereCenter.magnitude;
+
+            // The 3 space coords of the circumsphere center then:
+            return A + toCircumsphereCenter; // now this is the actual 3space location
+        }
+
 
         #endregion
 

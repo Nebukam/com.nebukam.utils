@@ -1,6 +1,8 @@
 {
     "name": "Nebukam.Utils",
-    "references": [],
+    "references": [
+        "Unity.Mathematics"
+    ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],

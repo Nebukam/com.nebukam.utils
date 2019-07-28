@@ -5,7 +5,29 @@ namespace Nebukam.Utils
 {
     static public class Draw
     {
-        
+
+        /// <summary>
+        /// Draw a triangle
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        static public void Tri(Vector3 A, Vector3 B, Vector3 C)
+        {
+            Line(A, B); Line(B, C); Line(C, A);
+        }
+
+        /// <summary>
+        /// Draw a triangle
+        /// </summary>
+        /// <param name="A"></param>
+        /// <param name="B"></param>
+        /// <param name="C"></param>
+        static public void Tri(Vector3 A, Vector3 B, Vector3 C, Color col)
+        {
+            Line(A, B, col); Line(B, C, col); Line(C, A, col);
+        }
+
         /// <summary>
         /// Draw a line between two positions.
         /// </summary>
