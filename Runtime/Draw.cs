@@ -1,4 +1,6 @@
 ﻿using System;
+using Unity.Mathematics;
+using static Unity.Mathematics.math;
 using UnityEngine;
 
 namespace Nebukam.Utils
@@ -12,7 +14,7 @@ namespace Nebukam.Utils
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <param name="C"></param>
-        static public void Tri(Vector3 A, Vector3 B, Vector3 C)
+        static public void Tri(float3 A, float3 B, float3 C)
         {
             Line(A, B); Line(B, C); Line(C, A);
         }
@@ -23,7 +25,7 @@ namespace Nebukam.Utils
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <param name="C"></param>
-        static public void Tri(Vector3 A, Vector3 B, Vector3 C, Color col)
+        static public void Tri(float3 A, float3 B, float3 C, Color col)
         {
             Line(A, B, col); Line(B, C, col); Line(C, A, col);
         }
@@ -33,7 +35,7 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        static public void Line(Vector3 from, Vector3 to)
+        static public void Line(float3 from, float3 to)
         {
             Line(from, to, Color.red);
         }
@@ -44,7 +46,7 @@ namespace Nebukam.Utils
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <param name="col"></param>
-        static public void Line(Vector3 from, Vector3 to, Color col)
+        static public void Line(float3 from, float3 to, Color col)
         {
             Debug.DrawLine(from, to, col);
         }
@@ -54,7 +56,7 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="center"></param>
         /// <param name="radius"></param>
-        static public void Circle(Vector3 center, float radius)
+        static public void Circle(float3 center, float radius)
         {
             Circle(center, radius, Color.red);
         }
@@ -65,21 +67,21 @@ namespace Nebukam.Utils
         /// <param name="center"></param>
         /// <param name="radius"></param>
         /// <param name="col"></param>
-        static public void Circle(Vector3 center, float radius, Color col)
+        static public void Circle(float3 center, float radius, Color col)
         {
 
             int samples = 30;
-            Vector3 from, to;
+            float3 from, to;
 
             float angleIncrease = (float)(Math.PI * 2) / (float)samples;
-            from = to = new Vector3(center.x + radius * (float)Math.Cos(0.0f), center.y, center.z + radius * (float)Math.Sin(0.0f));
+            from = to = float3(center.x + radius * (float)Math.Cos(0.0f), center.y, center.z + radius * (float)Math.Sin(0.0f));
 
             for (int i = 0; i < samples; i++)
             {
 
                 float rad = angleIncrease * (i + 1);
 
-                to = new Vector3(center.x + radius * Mathf.Cos(rad), center.y, center.z + radius * Mathf.Sin(rad));
+                to = float3(center.x + radius * Mathf.Cos(rad), center.y, center.z + radius * Mathf.Sin(rad));
 
                 Line(from, to, col);
 
@@ -94,7 +96,7 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="center"></param>
         /// <param name="radius"></param>
-        static public void Circle2D(Vector3 center, float radius)
+        static public void Circle2D(float3 center, float radius)
         {
             Circle2D(center, radius, Color.red);
         }
@@ -105,21 +107,21 @@ namespace Nebukam.Utils
         /// <param name="center"></param>
         /// <param name="radius"></param>
         /// <param name="col"></param>
-        static public void Circle2D(Vector3 center, float radius, Color col)
+        static public void Circle2D(float3 center, float radius, Color col)
         {
 
             int samples = 30;
-            Vector3 from, to;
+            float3 from, to;
 
             float angleIncrease = (float)(Math.PI * 2) / (float)samples;
-            from = to = new Vector3(center.x + radius * Mathf.Cos(0.0f), center.y + radius * Mathf.Sin(0.0f), center.z);
+            from = to = float3(center.x + radius * Mathf.Cos(0.0f), center.y + radius * Mathf.Sin(0.0f), center.z);
 
             for (int i = 0; i < samples; i++)
             {
 
                 float rad = angleIncrease * (i + 1);
 
-                to = new Vector3(center.x + radius * Mathf.Cos(rad), center.y + radius * Mathf.Sin(rad), center.z);
+                to = float3(center.x + radius * Mathf.Cos(rad), center.y + radius * Mathf.Sin(rad), center.z);
 
                 Line(from, to, col);
 
@@ -135,14 +137,14 @@ namespace Nebukam.Utils
         /// <param name="center"></param>
         /// <param name="size"></param>
         /// <param name="col"></param>
-        static public void Square(Vector3 center, float size, Color col)
+        static public void Square(float3 center, float size, Color col)
         {
             float s = size * 0.5f;
 
-            Vector3 A = center + new Vector3(-s, 0f, -s);
-            Vector3 B = center + new Vector3(-s, 0f, s);
-            Vector3 C = center + new Vector3(s, 0f, s);
-            Vector3 D = center + new Vector3(s, 0f, -s);
+            float3 A = center + float3(-s, 0f, -s);
+            float3 B = center + float3(-s, 0f, s);
+            float3 C = center + float3(s, 0f, s);
+            float3 D = center + float3(s, 0f, -s);
 
             Line(A, B, col);
             Line(B, C, col);

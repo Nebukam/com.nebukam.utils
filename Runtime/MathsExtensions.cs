@@ -6,23 +6,10 @@ namespace Nebukam.Utils
 {
     public static class MathsExtensions
     {
-
-        public static float Sqr(this float @this){ return @this * @this; }
-
-        public static int Sqr(this int @this){ return @this * @this; }
-
-        public static float Abs(this Vector2 @this){ return Mathf.Sqrt( @this.x * @this.x + @this.y * @this.y ); }
-        public static float Abs(this float2 @this) { return Mathf.Sqrt(@this.x * @this.x + @this.y * @this.y); }
-
-        public static float AbsSq(this Vector2 @this){ return @this.x * @this.x + @this.y * @this.y; }
-        public static float AbsSq(this float2 @this) { return @this.x * @this.x + @this.y * @this.y; }
-
+        
         public static float Det(this Vector2 @this, Vector2 other){ return @this.x * other.y - @this.y * other.x; }
         public static float Det(this float2 @this, float2 other) { return @this.x * other.y - @this.y * other.x; }
-
-        public static float Dot(this Vector2 @this, Vector2 other){ return @this.x * other.x + @this.y * other.y; }
-        public static float Dot(this float2 @this, float2 other) { return @this.x * other.x + @this.y * other.y; }
-
+        
         /// <summary>
         /// Lerp shorthand.
         /// </summary>
