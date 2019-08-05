@@ -221,7 +221,7 @@ namespace Nebukam.Utils
 
             float3 a, b, c, n;
 
-            a = float3(0f,0f,0f);
+            a = float3(false);
             b = axis;
             c = dir;
 
@@ -309,7 +309,8 @@ namespace Nebukam.Utils
         /// <returns>Positive when the point c lies to the left of the line ab.</returns>
         public static float LeftOf(float2 a, float2 b, float2 c)
         {
-            return Det(a - c, b - a);
+            float x1 = a.x = c.x, y1 = a.y - c.y, x2 = b.x - a.x, y2 = b.y - a.y;
+            return x1 * y2 - y1 * x2;
         }
 
         #endregion

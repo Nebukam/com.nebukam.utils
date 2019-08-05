@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Nebukam.ORCA
 {
+#if UNITY_EDITOR
     public class EnumFlagsAttribute : PropertyAttribute
     {
         public EnumFlagsAttribute() { }
@@ -17,4 +18,5 @@ namespace Nebukam.ORCA
             _property.intValue = EditorGUI.MaskField(_position, _label, _property.intValue, _property.enumNames);
         }
     }
+#endif
 }
