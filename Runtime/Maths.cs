@@ -309,7 +309,7 @@ namespace Nebukam.Utils
         /// <returns>Positive when the point c lies to the left of the line ab.</returns>
         public static float LeftOf(float2 a, float2 b, float2 c)
         {
-            float x1 = a.x = c.x, y1 = a.y - c.y, x2 = b.x - a.x, y2 = b.y - a.y;
+            float x1 = a.x - c.x, y1 = a.y - c.y, x2 = b.x - a.x, y2 = b.y - a.y;
             return x1 * y2 - y1 * x2;
         }
 

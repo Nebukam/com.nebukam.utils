@@ -56,9 +56,9 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="center"></param>
         /// <param name="radius"></param>
-        static public void Circle(float3 center, float radius)
+        static public void Circle(float3 center, float radius, int samples = 30)
         {
-            Circle(center, radius, Color.red);
+            Circle(center, radius, Color.red, samples);
         }
 
         /// <summary>
@@ -67,10 +67,9 @@ namespace Nebukam.Utils
         /// <param name="center"></param>
         /// <param name="radius"></param>
         /// <param name="col"></param>
-        static public void Circle(float3 center, float radius, Color col)
+        static public void Circle(float3 center, float radius, Color col, int samples = 30)
         {
 
-            int samples = 30;
             float3 from, to;
 
             float angleIncrease = (float)(Math.PI * 2) / (float)samples;
@@ -96,9 +95,9 @@ namespace Nebukam.Utils
         /// </summary>
         /// <param name="center"></param>
         /// <param name="radius"></param>
-        static public void Circle2D(float3 center, float radius)
+        static public void Circle2D(float3 center, float radius, int samples = 30)
         {
-            Circle2D(center, radius, Color.red);
+            Circle2D(center, radius, Color.red, samples);
         }
 
         /// <summary>
@@ -107,10 +106,9 @@ namespace Nebukam.Utils
         /// <param name="center"></param>
         /// <param name="radius"></param>
         /// <param name="col"></param>
-        static public void Circle2D(float3 center, float radius, Color col)
+        static public void Circle2D(float3 center, float radius, Color col, int samples = 30)
         {
 
-            int samples = 30;
             float3 from, to;
 
             float angleIncrease = (float)(Math.PI * 2) / (float)samples;
