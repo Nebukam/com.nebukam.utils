@@ -30,6 +30,12 @@ namespace Nebukam.Utils
 
         }
 
+        static public Color A(this Color col, float alpha)
+        {
+            col.a = alpha;
+            return col;
+        }
+
 
     }
 
