@@ -65,28 +65,7 @@ namespace Nebukam.Utils
 
             return diff / scale;
         }
-
-
-        /// <summary>
-        /// Multiply a float by itself
-        /// </summary>
-        /// <param name="f"></param>
-        /// <returns></returns>
-        public static float Sqr(float f)
-        {
-            return f * f;
-        }
-
-        /// <summary>
-        /// Multiply an int by itself
-        /// </summary>
-        /// <param name="f"></param>
-        /// <returns></returns>
-        public static int Sqr(int f)
-        {
-            return f * f;
-        }
-
+        
         /// <summary>
         /// Convert a value in radian into degree
         /// </summary>
@@ -94,7 +73,7 @@ namespace Nebukam.Utils
         /// <returns></returns>
         public static float Degrees(float radian)
         {
-            return radian * (180f / Mathf.PI);
+            return radian * 57.29578f;
         }
 
         /// <summary>
@@ -105,7 +84,7 @@ namespace Nebukam.Utils
         /// <returns></returns>
         public static float FindDegree(float x, float y)
         {
-            float value = (Mathf.Atan2(x, y) / Mathf.PI) * 180f;
+            float value = (atan2(x, y) / math.PI) * 180f;
             if (value < 0) value += 360f;
 
             return value;
@@ -287,7 +266,7 @@ namespace Nebukam.Utils
         /// <returns></returns>
         public static float Abs(float2 v)
         {
-            return Mathf.Sqrt(v.x * v.x + v.y * v.y);
+            return sqrt(v.x * v.x + v.y * v.y);
         }
 
         /// <summary>
@@ -297,7 +276,7 @@ namespace Nebukam.Utils
         /// <returns></returns>
         public static float Abs(float3 v)
         {
-            return Mathf.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+            return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         }
 
         /// <summary>
@@ -438,7 +417,7 @@ namespace Nebukam.Utils
         {
             //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
             float2 an = normalize(a), bn = normalize(b);
-            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y), -1f, 1f)) * 57.29578f;
+            float angle = acos(clamp((an.x * bn.x + an.y * bn.y), -1f, 1f)) * 57.29578f;
             return (angle == 0f || angle == 180f);
         }
 
@@ -452,7 +431,7 @@ namespace Nebukam.Utils
         {
             //2 vectors are parallel if the angle between the vectors are 0 or 180 degrees
             float3 an = normalize(a), bn = normalize(b);
-            float angle = Mathf.Acos(Mathf.Clamp((an.x * bn.x + an.y * bn.y + an.z * bn.z), -1f, 1f)) * 57.29578f;
+            float angle = acos(clamp((an.x * bn.x + an.y * bn.y + an.z * bn.z), -1f, 1f)) * 57.29578f;
             return (angle == 0f || angle == 180f);
         }
 
@@ -470,14 +449,14 @@ namespace Nebukam.Utils
         {
 
             float2 AB = float2(centerA.x - centerB.x, centerA.y - centerB.y);
-            float d = Mathf.Sqrt(AB.x * AB.x + AB.y * AB.y);
+            float d = sqrt(AB.x * AB.x + AB.y * AB.y);
 
-            if (d <= (radiusA + radiusB) && d >= Mathf.Abs(radiusB - radiusA))
+            if (d <= (radiusA + radiusB) && d >= abs(radiusB - radiusA))
             {
 
                 float ex = (centerB.x - centerA.x) / d, ey = (centerB.y - centerA.y) / d,
                     x = (radiusA * radiusA - radiusB * radiusB + d * d) / (2 * d),
-                    y = Mathf.Sqrt(radiusA * radiusA - x * x),
+                    y = sqrt(radiusA * radiusA - x * x),
                     xex = centerA.x + x * ex, xey = centerA.y + x * ey, yex = y * ex, yey = y * ey;
 
                 pt1 = float2(xex - yey, xey + yex);
@@ -502,9 +481,9 @@ namespace Nebukam.Utils
         {
 
             float2 AB = float2(centerA.x - centerB.x, centerA.y - centerB.y);
-            float d = Mathf.Sqrt(AB.x * AB.x + AB.y * AB.y);
+            float d = sqrt(AB.x * AB.x + AB.y * AB.y);
 
-            if (d <= (radiusA + radiusB) && d >= Mathf.Abs(radiusB - radiusA))
+            if (d <= (radiusA + radiusB) && d >= abs(radiusB - radiusA))
                 return true;
             else
                 return false;
@@ -674,47 +653,5 @@ namespace Nebukam.Utils
 
         #endregion
         
-        #region ILSpy
-
-        /*
-         * ILSPy unity methods for distance etc, for reference only
-        
-         This is Vector3.Distance:
-
-         // C#
-         public static float Distance(Vector3 a, Vector3 b)
-         {
-             Vector3 vector = new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
-             return Mathf.Sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
-         }
-
-         This is Vector3.sqrMagnitude:
-
-         // C#
-         public static float SqrMagnitude(Vector3 a)
-         {
-             return a.x * a.x + a.y * a.y + a.z * a.z;
-         }
-
-         This is Vector3.magnitude:
-
-         // C#
-         public static float Magnitude(Vector3 a)
-         {
-             return Mathf.Sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-         }
-
-         And this is Mathf.Sqrt:
-
-         // C#
-         public static float Sqrt(float f)
-         {
-             return (float)Math.Sqrt((double)f);
-         }
-
-        */
-
-        #endregion
-
     }
 }
